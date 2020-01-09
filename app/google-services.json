@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "317358691990",
+    "firebase_url": "https://areditor2-ac016.firebaseio.com",
+    "project_id": "areditor2-ac016",
+    "storage_bucket": "areditor2-ac016.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317358691990:android:08879a38472cd3686f54b7",
+        "android_client_info": {
+          "package_name": "com.axintevlad.areditor2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317358691990-19mt0km29589gqbsqo1usjdih0unoi7n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.axintevlad.areditor2",
+            "certificate_hash": "addbee5862f03d5638ffbfa684ba0f9e2af44251"
+          }
+        },
+        {
+          "client_id": "317358691990-mrh49hhg2boffhcn1m3lphmpfsujplfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDK8TL8IpJt_-PkqYkyihMGy_mzL287lw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317358691990-mrh49hhg2boffhcn1m3lphmpfsujplfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

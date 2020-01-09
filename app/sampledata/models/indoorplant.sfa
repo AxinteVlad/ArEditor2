@@ -1,0 +1,191 @@
+{
+  animations: [
+    {
+      path: 'sampledata/models/indoorplant.fbx',
+    },
+  ],
+  materials: [
+    {
+      name: 'IDP_root',
+      parameters: [
+        {
+          baseColor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColorMap: null,
+        },
+        {
+          normalMap: 'indoor plant_2_NOR',
+        },
+        {
+          interpolatedColor: null,
+        },
+        {
+          metallic: 0,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
+    },
+    {
+      name: 'IDP_ground',
+      parameters: [
+        {
+          baseColor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColorMap: 'indoor plant_2_COL',
+        },
+        {
+          normalMap: 'indoor plant_2_NOR',
+        },
+        {
+          interpolatedColor: null,
+        },
+        {
+          metallic: 0,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
+    },
+    {
+      name: 'IDP_leaves',
+      parameters: [
+        {
+          baseColor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColorMap: null,
+        },
+        {
+          normalMap: 'indoor plant_2_NOR',
+        },
+        {
+          interpolatedColor: null,
+        },
+        {
+          metallic: 0,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
+    },
+    {
+      name: 'IDP_Pot',
+      parameters: [
+        {
+          baseColor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColorMap: null,
+        },
+        {
+          normalMap: 'indoor plant_2_NOR',
+        },
+        {
+          interpolatedColor: null,
+        },
+        {
+          metallic: 0,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+      'BoneIndices',
+      'BoneWeights',
+    ],
+    collision: {},
+    file: 'sampledata/models/indoorplant.fbx',
+    name: 'indoorplant',
+    recenter: 'root',
+    scale: 0.20594799999999999,
+  },
+  samplers: [
+    {
+      file: 'sampledata/models\\indoor plant_2_COL.jpg',
+      name: 'indoor plant_2_COL',
+      pipeline_name: 'textures\\indoor plant_2_COL.jpg',
+    },
+    {
+      file: 'sampledata/models\\indoor plant_2_NOR.jpg',
+      name: 'indoor plant_2_NOR',
+      params: {
+        usage_type: 'Normal',
+      },
+      pipeline_name: 'textures\\indoor plant_2_NOR.jpg',
+    },
+  ],
+  version: '0.54:2',
+}

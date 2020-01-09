@@ -1,0 +1,95 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.axintevlad.areditor2"
+        minSdkVersion 26
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    // ARCore Library
+    implementation 'com.google.ar:core:1.14.0'
+
+    // Android Support Library
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.firebase:firebase-database:19.2.0'
+
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation "com.google.ar.sceneform.ux:sceneform-ux:1.14.0"
+
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+}
+
+task compileUxAssets {
+}
+
+preBuild.dependsOn compileUxAssets
+apply plugin: 'com.google.gms.google-services'
+
+apply plugin: 'com.google.ar.sceneform.plugin'
+
+sceneform.asset('models/andy.obj',
+        'default',
+        'models/andy.sfa',
+        'src/main/res/raw/andy')
+
+sceneform.before('compileUxAssets')
+
+
+sceneform.asset('sampledata/models/plant.FBX',
+        'default',
+        'sampledata/models/plant.sfa',
+        'src/main/res/raw/plant')
+
+sceneform.asset('sampledata/models/sofa.fbx',
+        'default',
+        'sampledata/models/sofa.sfa',
+        'src/main/res/raw/sofa')
+
+sceneform.asset('sampledata/models/chair.fbx',
+        'default',
+        'sampledata/models/chair.sfa',
+        'src/main/res/raw/chair')
+
+sceneform.asset('sampledata/models/car.fbx',
+        'default',
+        'sampledata/models/car.sfa',
+        'src/main/res/raw/car')
+
+sceneform.asset('sampledata/models/jeep.fbx',
+        'default',
+        'sampledata/models/jeep.sfa',
+        'src/main/res/raw/jeep')
+
+sceneform.asset('sampledata/models/yoda_master.fbx',
+        'default',
+        'sampledata/models/yoda_master.sfa',
+        'src/main/assets/yoda_master')
+
+sceneform.asset('sampledata/models/indoorplant.fbx',
+        'default',
+        'sampledata/models/indoorplant.sfa',
+        'src/main/res/raw/indoorplant')
+
+sceneform.asset('sampledata/models/credenza.gltf',
+        'default',
+        'sampledata/models/credenza.sfa',
+        'src/main/res/raw/credenza')
