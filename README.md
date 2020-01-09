@@ -9,6 +9,7 @@ Posibilitatea de a distribui modelul 3D din scena cu alte persoane.
 Functionalitati viitoare:\
 Crearea unei librari cu modele 3D\
 Posibilitatea de a distribui mai multe modele\
+....
 
 
 Cel care pune modelul: https://streamable.com/px2bc
