@@ -17,7 +17,7 @@ Cel care pune modelul: https://streamable.com/px2bc
 
 Cel care vede modelul: https://streamable.com/jhnft
 
-Update interfata: 
+Later update interfata: 
 <p align="center">
   <img src="https://i.imgur.com/bd4DFQ6.jpg" width="350" title="Screenshot">
 </p>
