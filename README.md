@@ -4,8 +4,8 @@ ArEditor este o aplicatie dezvoltata in Android Studio cu ajutorul ARCore & Clou
 
 Functionalitati prezente:\
 Adaugarea unui model 3D dintr-o lista in scena prin scanarea suprafetei.\
-Posibilitatea de a scala modelul\
-Posibilitatea de a distribui modelul 3D din scena cu alte persoane.
+Posibilitatea de a scala modelul.\
+Posibilitatea de a distribui modelul 3D din scena cu alte persoane ce se afla in apropiere.
 
 Functionalitati viitoare:\
 Crearea unei librari cu modele 3D offline si online\
