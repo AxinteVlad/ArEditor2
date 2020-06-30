@@ -30,12 +30,17 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.google.firebase:firebase-database:19.2.0'
-
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation "com.google.ar.sceneform.ux:sceneform-ux:1.14.0"
 
-
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation 'com.rbddevs.splashy:splashy:1.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.61+" // For JAVA Only
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }
 
 task compileUxAssets {
@@ -93,3 +98,94 @@ sceneform.asset('sampledata/models/credenza.gltf',
         'default',
         'sampledata/models/credenza.sfa',
         'src/main/res/raw/credenza')
+
+sceneform.asset('sampledata/bed1/bed1.obj',
+        'default',
+        'sampledata/bed1/bed1.sfa',
+        'src/main/assets/bed1')
+
+sceneform.asset('sampledata/bed2/bed2.obj',
+        'default',
+        'sampledata/bed2/bed2.sfa',
+        'src/main/assets/bed2')
+
+sceneform.asset('sampledata/bedroom/bedroom.obj',
+        'default',
+        'sampledata/bedroom/bedroom.sfa',
+        'src/main/assets/bedroom')
+
+sceneform.asset('sampledata/chair1/chair1.obj',
+        'default',
+        'sampledata/chair1/chair1.sfa',
+        'src/main/assets/chair1')
+
+sceneform.asset('sampledata/chair2/chair2.obj',
+        'default',
+        'sampledata/chair2/chair2.sfa',
+        'src/main/assets/chair2')
+
+sceneform.asset('sampledata/couch1/couch1.obj',
+        'default',
+        'sampledata/couch1/couch1.sfa',
+        'src/main/assets/couch1')
+
+sceneform.asset('sampledata/couch2/couch2.obj',
+        'default',
+        'sampledata/couch2/couch2.sfa',
+        'src/main/assets/couch2')
+
+sceneform.asset('sampledata/couch3/couch3.obj',
+        'default',
+        'sampledata/couch3/couch3.sfa',
+        'src/main/assets/couch3')
+
+sceneform.asset('sampledata/desk1/desk1.obj',
+        'default',
+        'sampledata/desk1/desk1.sfa',
+        'src/main/assets/desk1')
+
+sceneform.asset('sampledata/dulap1/dulap1.obj',
+        'default',
+        'sampledata/dulap1/dulap1.sfa',
+        'src/main/assets/dulap1')
+
+sceneform.asset('sampledata/couch4/couch4.obj',
+        'default',
+        'sampledata/couch4/couch4.sfa',
+        'src/main/assets/couch4')
+
+sceneform.asset('sampledata/fotoliu1/fotoliu1.obj',
+        'default',
+        'sampledata/fotoliu1/fotoliu1.sfa',
+        'src/main/assets/fotoliu1')
+
+sceneform.asset('sampledata/noptiera1/noptiera1.obj',
+        'default',
+        'sampledata/noptiera1/noptiera1.sfa',
+        'src/main/assets/noptiera1')
+
+sceneform.asset('sampledata/noptiera2/noptiera2.obj',
+        'default',
+        'sampledata/noptiera2/noptiera2.sfa',
+        'src/main/assets/noptiera2')
+
+sceneform.asset('sampledata/table1/table1.obj',
+        'default',
+        'sampledata/table1/table1.sfa',
+        'src/main/assets/table1')
+
+sceneform.asset('sampledata/veioza1/veioza1.obj',
+        'default',
+        'sampledata/veioza1/veioza1.sfa',
+        'src/main/assets/veioza1')
+
+
+sceneform.asset('sampledata/table2/table2.obj',
+        'default',
+        'sampledata/table2/table2.sfa',
+        'src/main/assets/table2')
+
+sceneform.asset('sampledata/stool1/stool1.obj',
+        'default',
+        'sampledata/stool1/stool1.sfa',
+        'src/main/assets/stool1')

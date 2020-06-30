@@ -71,8 +71,11 @@ public class FirebaseManager {
     }
 
     /** Stores the cloud anchor ID in the configured Firebase Database. */
-    public void storeUsingShortCode(int shortCode, String cloudAnchorId) {
-        rootRef.child(KEY_PREFIX + shortCode).setValue(cloudAnchorId);
+    public void storeUsingShortCode(int shortCode, String cloudAnchorId, String modelName) {
+       // rootRef.child(KEY_PREFIX + shortCode).setValue(cloudAnchorId);
+        rootRef.child(KEY_PREFIX + shortCode).child(KEY_PREFIX + shortCode).setValue(cloudAnchorId);
+        rootRef.child(KEY_PREFIX + shortCode).child("modelName").setValue(modelName);
+
     }
 
     /**
@@ -82,6 +85,30 @@ public class FirebaseManager {
     public void getCloudAnchorId(int shortCode, CloudAnchorIdListener listener) {
         rootRef
                 .child(KEY_PREFIX + shortCode)
+                .child(KEY_PREFIX + shortCode)
+                .addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                // Listener invoked when the data is successfully read from Firebase.
+                                listener.onCloudAnchorIdAvailable(String.valueOf(dataSnapshot.getValue()));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                Log.e(
+                                        TAG,
+                                        "The Firebase operation for getCloudAnchorId was cancelled.",
+                                        error.toException());
+                                listener.onCloudAnchorIdAvailable(null);
+                            }
+                        });
+    }
+
+    public void getModelName(int shortCode, CloudAnchorIdListener listener) {
+        rootRef
+                .child(KEY_PREFIX + shortCode)
+                .child("modelName")
                 .addListenerForSingleValueEvent(
                         new ValueEventListener() {
                             @Override

@@ -1,17 +1,27 @@
-package com.axintevlad.areditor2;
+package com.axintevlad.areditor2.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.axintevlad.areditor2.R;
+import com.axintevlad.areditor2.RecyclerItemClickListener;
+import com.axintevlad.areditor2.activity.ARActivity;
+import com.axintevlad.areditor2.adapter.ChosenFurnitureAdapter;
 import com.axintevlad.areditor2.helpers.FirebaseManager;
 import com.axintevlad.areditor2.helpers.ResolveDialogFragment;
 import com.axintevlad.areditor2.helpers.StorageManager;
@@ -31,8 +41,13 @@ import com.google.ar.core.Config.CloudAnchorMode;
 import com.google.ar.core.Session;
 import com.google.firebase.FirebaseApp;
 
+import java.util.ArrayList;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Main Fragment for the Cloud Anchors Codelab.
@@ -40,24 +55,23 @@ import androidx.fragment.app.FragmentManager;
  * <p>This is where the AR Session and the Cloud Anchors are managed.
  */
 public class CloudAnchorFragment extends ArFragment {
-
+    private static final String TAG = "CloudAnchorFragment";
     private Scene arScene;
     private AnchorNode anchorNode;
-    private ModelRenderable andyRenderable;
-    private ModelRenderable sofaRenderable;
-    private ModelRenderable plantRenderable;
-
 
     private final CloudAnchorManager cloudAnchorManager = new CloudAnchorManager();
     private final SnackbarHelper snackbarHelper = new SnackbarHelper();
     private Button resolveButton;
     private FloatingActionButton fabBtn;
-    private ImageView sofaImage;
-    private ImageView plantImage;
-    private int selected = 1;
-
+    private ArrayList<String> imgIds;
     public FirebaseManager firebaseManager;
+    private RecyclerView recyclerView;
+    private ChosenFurnitureAdapter adapter;
 
+    private boolean resolvePressed = false;
+    private String modelName = null;
+    private String modelNameFromDB = null;
+    private ModelRenderable modelRenderable;
     @Override
     protected Config getSessionConfiguration(Session session) {
         Config config = super.getSessionConfiguration(session);
@@ -69,20 +83,9 @@ public class CloudAnchorFragment extends ArFragment {
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
     public void onAttach(Context context) {
         super.onAttach(context);
-        ModelRenderable.builder()
-                .setSource(context, R.raw.andy)
-                .build()
-                .thenAccept(renderable -> andyRenderable = renderable);
-        ModelRenderable.builder()
-                .setSource(context, R.raw.sofa)
-                .build()
-                .thenAccept(renderable -> sofaRenderable = renderable);
-        ModelRenderable.builder()
-                .setSource(context, R.raw.indoorplant)
-                .build()
-                .thenAccept(renderable -> plantRenderable = renderable);
-
+        imgIds = getArguments().getStringArrayList("images");
         firebaseManager = new FirebaseManager(context);
+
     }
 
     @Override
@@ -91,6 +94,7 @@ public class CloudAnchorFragment extends ArFragment {
         // Inflate from the Layout XML file.
         View rootView = inflater.inflate(R.layout.cloud_anchor_fragment, container, false);
         LinearLayout arContainer = rootView.findViewById(R.id.ar_container);
+        recyclerView = rootView.findViewById(R.id.ar_recyclerview);
 
         // Call the ArFragment's implementation to get the AR View.
         View arView = super.onCreateView(inflater, arContainer, savedInstanceState);
@@ -105,29 +109,33 @@ public class CloudAnchorFragment extends ArFragment {
         resolveButton.setOnClickListener(v -> onResolveButtonPressed());
 
         //Fab button
-        fabBtn = rootView.findViewById(R.id.fabButton);
+     /*   fabBtn = rootView.findViewById(R.id.fabButton);
         fabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        });
+        });*/
 
-        //Img
-        plantImage = rootView.findViewById(R.id.imgPlant);
-        plantImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selected = 3;
-            }
-        });
-        sofaImage = rootView.findViewById(R.id.imgSofa);
-        sofaImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selected = 2;
-            }
-        });
+        adapter = new ChosenFurnitureAdapter(getContext(), imgIds);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        drawObject(imgIds.get(position) + ".sfb");
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+
 
 
         arScene = getArSceneView().getScene();
@@ -150,7 +158,7 @@ public class CloudAnchorFragment extends ArFragment {
 
         snackbarHelper.showMessage(getActivity(), "Now hosting anchor...");
         cloudAnchorManager.hostCloudAnchor(
-                getArSceneView().getSession(), anchor, this::onHostedAnchorAvailable);
+                this.getArSceneView().getSession(), anchor, this::onHostedAnchorAvailable);
     }
 
     private synchronized void onClearButtonPressed() {
@@ -165,8 +173,9 @@ public class CloudAnchorFragment extends ArFragment {
 
     private synchronized void onResolveButtonPressed() {
         ResolveDialogFragment dialog = ResolveDialogFragment.createWithOkListener(
-                this::onShortCodeEntered);;
-        dialog.show(getFragmentManager(), "Resolve");
+                this::onShortCodeEntered);
+        resolvePressed = true;
+        dialog.show(this.getFragmentManager(), "Resolve");
     }
 
     // Modify the renderables when a new anchor is available.
@@ -177,36 +186,36 @@ public class CloudAnchorFragment extends ArFragment {
             anchorNode = null;
         }
         if (anchor != null) {
-            if (andyRenderable == null) {
-                // Display an error message if the renderable model was not available.
-                Toast toast = Toast.makeText(getContext(), "Andy model was not loaded.", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-                return;
-            }
+
+
             // Create the Anchor.
             anchorNode = new AnchorNode(anchor);
             arScene.addChild(anchorNode);
+            if(resolvePressed) {
+                // Create the transformable andy and add it to the anchor.
+//                TransformableNode andy = new TransformableNode(getTransformationSystem());
+//                Log.d(TAG, "setNewAnchor: "+ modelNameFromDB);
+//                ModelRenderable.builder()
+//                        .setSource(getContext(), Uri.parse(modelNameFromDB))
+//                        .build()
+//                        .thenAccept(renderable -> modelRenderable = renderable);
+//                andy.setParent(anchorNode);
+//                andy.setRenderable(modelRenderable);
+//                andy.select();
+                ModelRenderable.builder()
+                        .setSource(getContext(), Uri.parse(modelNameFromDB))
+                        .build()
+                        .thenAccept(modelRenderable -> {
+                            modelName = Uri.parse(modelNameFromDB).toString();
+                            addModelToScene(anchor, modelRenderable);})
+                        .exceptionally(throwable -> {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setMessage(throwable.getMessage()).show();
+                            return null;
+                        });
 
-            // Create the transformable andy and add it to the anchor.
-            TransformableNode andy = new TransformableNode(getTransformationSystem());
 
-            if(selected == 1){
-                    andy.setParent(anchorNode);
-                    andy.setRenderable(andyRenderable);
-                    andy.select();
-                }
-            if(selected == 2){
-                    andy.setParent(anchorNode);
-                    andy.setRenderable(sofaRenderable);
-                    andy.select();
-                }
-            if(selected == 3){
-                    andy.setParent(anchorNode);
-                    andy.setRenderable(plantRenderable);
-                    andy.select();
             }
-
 
         }
     }
@@ -216,7 +225,8 @@ public class CloudAnchorFragment extends ArFragment {
             String cloudAnchorId = anchor.getCloudAnchorId();
             firebaseManager.nextShortCode(shortCode -> {
                 if (shortCode != null) {
-                    firebaseManager.storeUsingShortCode(shortCode, cloudAnchorId);
+                    firebaseManager.storeUsingShortCode(shortCode, cloudAnchorId,modelName);
+
                     snackbarHelper
                             .showMessage(getActivity(), "Cloud Anchor Hosted. Short code: " + shortCode);
                 } else {
@@ -233,6 +243,16 @@ public class CloudAnchorFragment extends ArFragment {
     }
 
     private synchronized void onShortCodeEntered(int shortCode) {
+        firebaseManager.getModelName(shortCode, cloudAnchorId -> {
+            if (cloudAnchorId == null || cloudAnchorId.isEmpty()) {
+                snackbarHelper.showMessage(
+                        getActivity(),
+                        "A Cloud Anchor ID for the short code " + shortCode + " was not found.");
+                return;
+            }
+            modelNameFromDB = cloudAnchorId;
+        });
+
         firebaseManager.getCloudAnchorId(shortCode, cloudAnchorId -> {
             if (cloudAnchorId == null || cloudAnchorId.isEmpty()) {
                 snackbarHelper.showMessage(
@@ -241,6 +261,7 @@ public class CloudAnchorFragment extends ArFragment {
                 return;
             }
             resolveButton.setEnabled(false);
+            Log.d(TAG, "onShortCodeEntered: " + getArSceneView().getSession());
             cloudAnchorManager.resolveCloudAnchor(
                     getArSceneView().getSession(),
                     cloudAnchorId,
@@ -253,6 +274,7 @@ public class CloudAnchorFragment extends ArFragment {
         if (cloudState == CloudAnchorState.SUCCESS) {
             snackbarHelper.showMessage(getActivity(), "Cloud Anchor Resolved. Short code: " + shortCode);
             setNewAnchor(anchor);
+            //drawObject("bed1.obj");
         } else {
             snackbarHelper.showMessage(
                     getActivity(),
@@ -264,6 +286,37 @@ public class CloudAnchorFragment extends ArFragment {
         }
     }
 
+    private void drawObject(String objectName) {
+        this.setOnTapArPlaneListener((hitResult, plane, motionEvent) -> {
+            // Fixed location & render overlay like marker
+            Anchor anchor = hitResult.createAnchor();
 
+            ModelRenderable.builder()
+                    .setSource(getContext(), Uri.parse(objectName))
+                    .build()
+                    .thenAccept(modelRenderable -> {
+                        modelName = Uri.parse(objectName).toString();
+                        addModelToScene(anchor, modelRenderable);})
+                    .exceptionally(throwable -> {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage(throwable.getMessage()).show();
+                        return null;
+                    });
+
+            arScene = getArSceneView().getScene();
+            arScene.addOnUpdateListener(frameTime -> cloudAnchorManager.onUpdate());
+            onArPlaneTap(hitResult);
+        });
+
+    }
+    private void addModelToScene(Anchor anchor, ModelRenderable modelRenderable) {
+
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        TransformableNode node = new TransformableNode(this.getTransformationSystem());
+        node.setRenderable(modelRenderable);
+        node.setParent(anchorNode);
+        this.getArSceneView().getScene().addChild(anchorNode);
+        node.select();
+    }
 
 }

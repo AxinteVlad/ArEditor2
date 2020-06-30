@@ -28,7 +28,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        >
         <Button
             android:text="CLEAR"
             android:id="@+id/clear_button"
@@ -47,28 +50,12 @@
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_photo"
         android:layout_margin="16dp" />
-    <HorizontalScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ar_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="bottom">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-            <ImageView
-                android:id="@+id/imgSofa"
-                android:src="@drawable/sofa"
-                android:layout_width="100dp"
-                android:layout_height="100dp"/>
-            <ImageView
-                android:id="@+id/imgPlant"
-                android:src="@drawable/plant"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"/>
-
-        </LinearLayout>
-    </HorizontalScrollView>
+        android:layout_height="64dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 </FrameLayout>

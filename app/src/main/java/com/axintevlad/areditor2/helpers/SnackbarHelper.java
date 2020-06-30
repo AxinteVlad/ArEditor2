@@ -6,6 +6,7 @@ package com.axintevlad.areditor2.helpers;
 
 import android.app.Activity;
 
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -18,11 +19,16 @@ import com.google.android.material.snackbar.Snackbar;
 public final class SnackbarHelper {
     private static final int BACKGROUND_COLOR = 0xbf323232;
     private Snackbar messageSnackbar;
-    private enum DismissBehavior { HIDE, SHOW, FINISH };
+
+    private enum DismissBehavior {HIDE, SHOW, FINISH}
+
+    ;
     private int maxLines = 2;
     private String lastMessage = "";
 
-    /** Shows a snackbar with a given message. */
+    /**
+     * Shows a snackbar with a given message.
+     */
     public void showMessage(Activity activity, String message) {
         if (!message.isEmpty() && (messageSnackbar == null || !lastMessage.equals(message))) {
             lastMessage = message;
@@ -57,6 +63,13 @@ public final class SnackbarHelper {
                             .findViewById(com.google.android.material.R.id.snackbar_text))
                     .setMaxLines(maxLines);
             messageSnackbar.show();
+        });
+        messageSnackbar.setAction("CLOSE", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call your action method here
+                messageSnackbar.dismiss();
+            }
         });
     }
 }
